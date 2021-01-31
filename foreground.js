@@ -6,19 +6,39 @@ $('[name=dataTables_length]').val(200);
  Feedback =0;
  Permission =0;
  Complaint =0;
+ Suggestion=0;
+ No_Feedback =0;
+ Feedback_less_than_4_words =0
+
+
 
 for ( step = 1; step < x.length; step++){
-  if(x[step].textContent.includes("Feedback")){
+  feedback_type= x[step].getElementsByTagName('td')[6].textContent;
+  feedback_content = x[step].getElementsByTagName('td')[7].textContent;
+  if(feedback_type.includes( "Feedback")){
     Feedback++;
   }
-  if(x[step].textContent.includes("Permission")){
+  if(feedback_type.includes("Permission")){
     Permission++;
     x[step].setAttribute("style", "background:yellow")
   }
+  if (feedback_type === "") {
+No_Feedback ++;
+}
+if (feedback_type.includes("Complaint")) {
+  Complaint ++;
+    }
+if (feedback_type.includes("Suggestion")) {
+      Suggestion ++;
+        }
+}
+if(feedback_content.split(" ").length < 4){
+  Feedback_less_than_4_words++;
+  alert(feedback_content);
 }
 
-console.log(Permission)
-console.log(Feedback)
+// console.log(Feedback)
+// console.log(Permission)
 
 tb = document.getElementById('SummaryTable');
 if(tb) {
@@ -33,7 +53,7 @@ var y = document.createElement("TR");
 y.setAttribute("id", "SummaryHeader");
 document.getElementById("SummaryTable").appendChild(y);
 
-["Feedback", "Permission", "Complaint"].forEach((item, i) => {
+["Feedback", "Permission", "Complaint","Suggestion", "No Feedback","Feedback less than 4 words"].forEach((item, i) => {
   var z = document.createElement("TD");
   var t = document.createTextNode(item);
   z.appendChild(t);
@@ -44,7 +64,7 @@ var y = document.createElement("TR");
 y.setAttribute("id", "SummaryBody");
 document.getElementById("SummaryTable").appendChild(y);
 
-[Feedback, Permission, Complaint].forEach((item, i) => {
+[Feedback, Permission, Complaint, Suggestion, No_Feedback,Feedback_less_than_4_words].forEach((item, i) => {
   var z = document.createElement("TD");
   var t = document.createTextNode(item);
   z.appendChild(t);

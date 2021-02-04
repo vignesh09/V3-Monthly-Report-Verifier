@@ -20,10 +20,17 @@ chrome.tabs.onUpdated.addListener( function (tabId, changeInfo, tab) {
         active_tab_id = tabId;
 
         if (current_tab_info.url.includes("/www.v3healthzone.com/marketing/feedback_check.php")) {
+          alert("No");
             // chrome.tabs.insertCSS(null, { file: 'mystyles.css' });
             chrome.tabs.executeScript(null, { file: 'jquery.js' }, () => chrome.tabs.executeScript(null, { file: 'foreground.js' }))
             // chrome.tabs.executeScript(null, { file: 'foreground.js' }, () => console.log('i injected'))
         }
+        if (current_tab_info.url.includes("/www.v3healthzone.com/marketing/feedback_check1.php")) {
+          alert("yes");
+          // chrome.tabs.insertCSS(null, { file: 'mystyles.css' });
+          chrome.tabs.executeScript(null, { file: 'jquery.js' }, () => chrome.tabs.executeScript(null, { file: 'foregroundSpl.js' }))
+          // chrome.tabs.executeScript(null, { file: 'foreground.js' }, () => console.log('i injected'))
+      }
     });
   
     }

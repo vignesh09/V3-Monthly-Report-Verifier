@@ -1,16 +1,14 @@
 // $("[name=dyntable_length]").val(200);
 
-$("#dyntable_length").append("<div id=\"first_message\"><h1>After selecting 500 from the dropdown menu click the button</h1><br /><button id= \"get_report_button\">Get Report</button></div>");
+// $("#dyntable_length").append("<div id=\"first_message\"><h1>After selecting 500 from the dropdown menu click the button</h1><br /><button id= \"get_report_button\">Get Report</button></div>");
 
-$("#get_report_button").click(
-function (event){
-  event.preventDefault();
+  // event.preventDefault();
   // document.addEventListener("mousewheel", this.mousewheel.bind(this), { passive: false });
   $("#first_message").remove();
 x = $("#dyntable").find("tr");
 $("#dyntable_length").attr("style", "width: 100% !important");
 // $('#SummaryTable').attr('style', 'width: 100% !important');
-Feedback = 0;
+Feedback = [];
 Permission = [];
 Complaint = [];
 Suggestion = [];
@@ -18,37 +16,6 @@ No_Feedback = [];
 Feedback_less_than_4_words = [];
 Video_not_viewed = [];
 
-//***********************old logic***************
-// for ( step = 1; step < x.length; step++){
-//   feedback_type= x[step].getElementsByTagName('td')[6].textContent;
-//   feedback_content = x[step].getElementsByTagName('td')[7].textContent;
-//   feedback_cutoffTime = x[step].getElementsByTagName('td')[4].textContent;
-//   video_viewed_times=x[step].getElementsByTagName('td')[3].textContent;
-//
-//   if(feedback_type.includes( "Feedback")){
-//     Feedback++;
-//   }
-//   if(feedback_type.includes("Permission")){
-//     Permission.push([feedback_cutoffTime,feedback_type,feedback_content]);
-//     x[step].setAttribute("style", "background:yellow")
-//   }
-//   if (feedback_type === "") {
-// No_Feedback.push([feedback_cutoffTime,feedback_type,feedback_content]);
-// }
-// if(video_viewed_times === " "){
-//   Video_not_viewed.push([feedback_cutoffTime,feedback_type,feedback_content]);
-// }
-// if (feedback_type.includes("Complaint")) {
-//   Complaint.push([feedback_cutoffTime,feedback_type,feedback_content]);
-//     }
-// if (feedback_type.includes("Suggestion")) {
-//       Suggestion.push([feedback_cutoffTime,feedback_type,feedback_content]);
-//         }
-// }
-// if(feedback_content.split(" ").length < 4 && feedback_content.split(" ").length > 0){
-//   Feedback_less_than_4_words.push([feedback_cutoffTime,feedback_type,feedback_content]);
-//   // alert(feedback_content);
-// }
 
 //**********************************************************************New logic**************************************88
 Suggestion = [];
@@ -63,7 +30,7 @@ for (step = 1; step < x.length; step++) {
   video_viewed_times = x[step].getElementsByTagName("td")[3].textContent;
 
   if (feedback_type.includes("Feedback")) {
-    Feedback++;
+    Feedback.push([feedback_cutoffTime, feedback_type, feedback_content]);
     if (
       feedback_content.split(" ").length < 4 &&
       feedback_content.split(" ").length > 0
@@ -286,4 +253,3 @@ $("head").append(
 //
 // $('head').append('<script> console.log("hello world");$(document).ready(function(){ $(\'[data-toggle="tooltip"]\').tooltip(); var actions = $("table td:last-child").html();$(".add-new").click(function(){ $(this).attr("disabled", "disabled"); var index = $("table tbody tr:last-child").index(); var row = \'<tr>\' + \'<td><input type="text" class="form-control" name="name" id="name"></td>\' + \'<td><input type="text" class="form-control" name="department" id="department"></td>\' + \'<td><input type="text" class="form-control" name="phone" id="phone"></td>\' + \'<td>\' + actions + \'</td>\' + \'</tr>\'; $("table").append(row); $("table tbody tr").eq(index + 1).find(".add, .edit").toggle(); $(\'[data-toggle="tooltip"]\').tooltip(); }); $(document).on("click", ".add", function(){ var empty = false; var input = $(this).parents("tr").find(\'input[type="text"]\'); input.each(function(){ if(!$(this).val()){ $(this).addClass("error"); empty = true; } else{ $(this).removeClass("error"); } }); $(this).parents("tr").find(".error").first().focus(); if(!empty){ input.each(function(){ $(this).parent("td").html($(this).val()); }); $(this).parents("tr").find(".add, .edit").toggle(); $(".add-new").removeAttr("disabled"); } }); $(document).on("click", ".edit", function(){ $(this).parents("tr").find("td:not(:last-child)").each(function(){ $(this).html(\'<input type="text" class="form-control" value="\' + $(this).text() + \'">\'); }); $(this).parents("tr").find(".add, .edit").toggle(); $(".add-new").attr("disabled", "disabled"); }); $(document).on("click", ".delete", function(){ $(this).parents("tr").remove(); $(".add-new").removeAttr("disabled"); }); }); </script>')
 
-});

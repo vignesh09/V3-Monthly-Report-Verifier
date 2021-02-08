@@ -5,9 +5,30 @@ $("#dyntable_length").append("<div id=\"first_message\"><h1>After selecting 500 
 $("#get_report_button").click(
 function (event){
   event.preventDefault();
+
+  function get_valid_feedback(feedback_type,feedback_content){
+    ty = [];
+    content = [];
+    if(feedback_type.includes("hr")){
+      ty = feedback_type.split("<hr>");
+      content = feedback_content.split("<hr>");
+      for(i = ty.length-1;i>=0;i--){
+        if(ty[i]=="Feedback"){
+          ty= ty[i];
+          content = content[i];
+        }
+      }
+    }
+    else{
+      ty = feedback_type;
+      content = feedback_content;
+    }
+    // alert(ty,content)
+    return(content);
+  }
   // document.addEventListener("mousewheel", this.mousewheel.bind(this), { passive: false });
   $("#first_message").remove();
-x = $("#dyntable").find("tr");
+let x = $("#dyntable").find("tr");
 $("#dyntable_length").attr("style", "width: 100% !important");
 // $('#SummaryTable').attr('style', 'width: 100% !important');
 Feedback = 0;
@@ -56,17 +77,23 @@ Feedback_less_than_4_words = [];
 Feedback = [];
 video_not_viewed_data = [];
 permission_complaint_data = [];
+Feedback_above_4_words = 0;
+Login_same_device = false;
+// console.log(x.length)
 for (step = 1; step < x.length; step++) {
   feedback_type = x[step].getElementsByTagName("td")[6].innerHTML;
   feedback_content = x[step].getElementsByTagName("td")[7].innerHTML;
   feedback_cutoffTime = x[step].getElementsByTagName("td")[4].innerHTML;
   video_viewed_times = x[step].getElementsByTagName("td")[3].textContent;
-
+  if(x[step].getElementsByTagName("td")[5].textContent.includes( "Login Same Device")){
+    Login_same_device = true;
+  }
   if (feedback_type.includes("Feedback")) {
+    valid_feedback = get_valid_feedback(feedback_type,feedback_content);
     Feedback++;
     if (
-      feedback_content.split(" ").length < 4 &&
-      feedback_content.split(" ").length > 0
+      valid_feedback.split(" ").length < 4 &&
+      valid_feedback.split(" ").length > 0
     ) {
       Feedback_less_than_4_words.push([
         feedback_cutoffTime,
@@ -74,6 +101,9 @@ for (step = 1; step < x.length; step++) {
         feedback_content,
       ]);
       // alert(feedback_content);
+    }
+    else{
+      Feedback_above_4_words++;
     }
   }
 
@@ -140,7 +170,7 @@ for (step = 1; step < x.length; step++) {
   }
 }
 
-//*************************************************************************************************************************
+//*******************************************************Inject HTML Code Table******************************************************************
 
 // console.log(Feedback)
 // console.log(Permission)
@@ -153,6 +183,8 @@ tb = document.getElementById("summarytable_container");
 if (tb) {
   tb.remove();
 }
+if(Login_same_device)
+$("#dyntable_length").append("<h1>Login Same Device</h1>");
 x = document.createElement("TABLE");
 x.setAttribute("id", "SummaryTable");
 document.getElementById("dyntable_length").appendChild(x);
@@ -162,12 +194,14 @@ y.setAttribute("id", "SummaryHeader");
 document.getElementById("SummaryTable").appendChild(y);
 
 [
-  "Feedback",
+  "Videos Viewed",
   "Video Not viewed",
-  "Permission",
+  "Feedback",
   "No Feedback",
-  "Complaint",
+  "Feedback Above 4 Words",
   "Feedback less than 4 words",
+  "Permission",
+  "Complaint",
   "Suggestion",
 ].forEach((item, i) => {
   var z = document.createElement("TD");
@@ -182,12 +216,15 @@ y.setAttribute("id", "SummaryBody");
 document.getElementById("SummaryTable").appendChild(y);
 
 [
-  Feedback,
+  180-Video_not_viewed.length,
   Video_not_viewed.length,
-  Permission.length,
+  Feedback,
   No_Feedback.length,
-  Complaint.length,
+  Feedback_above_4_words,
   Feedback_less_than_4_words.length,
+  Permission.length,
+  Complaint.length,
+  
   Suggestion.length,
 ].forEach((item, i) => {
   var z = document.createElement("TD");
@@ -286,4 +323,6 @@ $("head").append(
 //
 // $('head').append('<script> console.log("hello world");$(document).ready(function(){ $(\'[data-toggle="tooltip"]\').tooltip(); var actions = $("table td:last-child").html();$(".add-new").click(function(){ $(this).attr("disabled", "disabled"); var index = $("table tbody tr:last-child").index(); var row = \'<tr>\' + \'<td><input type="text" class="form-control" name="name" id="name"></td>\' + \'<td><input type="text" class="form-control" name="department" id="department"></td>\' + \'<td><input type="text" class="form-control" name="phone" id="phone"></td>\' + \'<td>\' + actions + \'</td>\' + \'</tr>\'; $("table").append(row); $("table tbody tr").eq(index + 1).find(".add, .edit").toggle(); $(\'[data-toggle="tooltip"]\').tooltip(); }); $(document).on("click", ".add", function(){ var empty = false; var input = $(this).parents("tr").find(\'input[type="text"]\'); input.each(function(){ if(!$(this).val()){ $(this).addClass("error"); empty = true; } else{ $(this).removeClass("error"); } }); $(this).parents("tr").find(".error").first().focus(); if(!empty){ input.each(function(){ $(this).parent("td").html($(this).val()); }); $(this).parents("tr").find(".add, .edit").toggle(); $(".add-new").removeAttr("disabled"); } }); $(document).on("click", ".edit", function(){ $(this).parents("tr").find("td:not(:last-child)").each(function(){ $(this).html(\'<input type="text" class="form-control" value="\' + $(this).text() + \'">\'); }); $(this).parents("tr").find(".add, .edit").toggle(); $(".add-new").attr("disabled", "disabled"); }); $(document).on("click", ".delete", function(){ $(this).parents("tr").remove(); $(".add-new").removeAttr("disabled"); }); }); </script>')
 
+
+// window.open("https://stackoverflow.com/questions/16503879/chrome-extension-how-to-open-a-link-in-new-tab"); 
 });
